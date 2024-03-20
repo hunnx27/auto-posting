@@ -13,10 +13,18 @@ class ExtractPost:
         self._platform = platform
         self._savedir = savedir
         self._savedImageDir = ''
+        self._text = ''
         self._images = []
+
 
     def getSavedImages(self):
         return self._images
+    
+    def getTitle(self):
+        return self._post_name
+    
+    def getText(self):
+        return self._text
     
     # 폴더 체크 및 폴더 생성 함수
     def __checkOrDirs(self, file_path):
@@ -44,6 +52,7 @@ class ExtractPost:
             saved_file_name =  str(self._idx) + '.png'
             print(saved_folder_dir)
             ilib = ImageLib()
+            savedFilePath = ''
             if self.__checkOrDirs(saved_folder_dir) :
                 savedFilePath = saved_folder_dir + "/" + saved_file_name
                 ilib.draw_watermark(url).save(savedFilePath)
@@ -61,6 +70,37 @@ class ExtractPost:
             return '\n\n'+tag.get_text().strip()
         else:
             return '[ELSE][' + tag.name + ']' + tag.get_text().strip() + ";"
+        
+    def __html_parser2(self, tag):
+        if tag.name == 'img':
+            # 이미지 처리
+            # img tag 가져오기
+            self._idx = self._idx+1
+            url = tag.attrs['src']
+            if 'data-lazy-src' in tag.attrs:
+                url = tag.attrs['data-lazy-src']
+            saved_folder_dir = self._savedir + "/" + self._post_name  + "/images"
+            self._savedImageDir = saved_folder_dir
+            saved_file_name =  str(self._idx) + '.png'
+            print(saved_folder_dir)
+            ilib = ImageLib()
+            savedFilePath = ''
+            if self.__checkOrDirs(saved_folder_dir) :
+                savedFilePath = saved_folder_dir + "/" + saved_file_name
+                ilib.draw_watermark(url).save(savedFilePath)
+                self._images.append(savedFilePath)
+            #print('pass')
+            return ('image', savedFilePath)
+        if tag.get_text().strip() == '':
+            return ('text', '')
+        elif tag.name == 'p':
+            # p tag 가져오기
+            return ('text', tag.get_text().strip())
+        elif tag.name == 'h1' or tag.name == 'h2' or tag.name == 'h3':
+            # h1,h2,h3 tag 가져오기
+            return ('text', '\n\n'+tag.get_text().strip())
+        else:
+            return
 
     # 블로그 포스팅 가져오기
     def __get_content(self):
@@ -103,6 +143,7 @@ class ExtractPost:
         contents = self.__get_content()
         text = "\n".join(contents)
         print(text)
+        self._text = text
         file_path = self._savedir + "/" + self._post_name
         if self.__checkOrDirs(file_path):
             t = open(file_path + '/content.txt', 'w', encoding='utf-8')

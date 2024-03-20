@@ -1,4 +1,4 @@
-from selenium_module import webdriver
+from selenium import webdriver
 from selenium.webdriver.chrome.service import Service as ChromeService
 import time
 import sys
