@@ -55,11 +55,15 @@ tistory = Tistory(
             id='',
             pw='',
         )
+from gptautogui import AutoGpt
+gpt = AutoGpt()
 for expost in extractPostlist:
     title = expost.getTitle()
     savedimages = expost.getSavedImages()
     text = expost.getText()
-    tistory.write(title=title, datas=[('txt', text)])
+    gptText = gpt.searchGPT(text)
+    print(gptText)
+    tistory.write(title=title, datas=[('txt', text)]) # 일단주석
 
     print('일단종료')
     sys.exit(0)
