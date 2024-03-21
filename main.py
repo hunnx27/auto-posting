@@ -1,6 +1,13 @@
 import sys
 
 # 인자 입력받기
+if len(sys.argv) != 3:
+    print("길이 :", len(sys.argv))
+    print("ID와 비밀번호를 인자로 입력하세요.")
+    sys.exit()
+
+args_id = sys.argv[1]
+args_pw = sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'D:/2.Private/job/td_company/data' # TODO 인자로 받게 수정필요
 arg_targetPostId = 'travelhyuk'
@@ -51,19 +58,29 @@ for post in postlist:
     
 from selenium_module.tistory import Tistory
 tistory = Tistory(
-            url='',
-            id='',
-            pw='',
+            url='https://superblo.tistory.com/manage/newpost',
+            id=args_id,
+            pw=args_pw,
         )
-from gptautogui import AutoGpt
-gpt = AutoGpt()
+from autogpt import AutoGpt
+from selenium.webdriver.chrome.options import Options
+from selenium import webdriver
+option = Options()
+option.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
+driver = webdriver.Chrome(options=option)
+from autogpt import AutoGpt
+gpt = AutoGpt(driver=driver)
 for expost in extractPostlist:
     title = expost.getTitle()
     savedimages = expost.getSavedImages()
     text = expost.getText()
-    gptText = gpt.searchGPT(text)
+    gptText = gpt.searchGPT2(text)
     print(gptText)
-    tistory.write(title=title, datas=[('txt', text)]) # 일단주석
+    datas = []
+    datas.append(('text', gptText))
+    for img in savedimages:
+        datas.append(('image', img))
+    tistory.write(title=title, datas=datas) # 일단주석
 
     print('일단종료')
     sys.exit(0)
