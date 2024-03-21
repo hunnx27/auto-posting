@@ -102,11 +102,9 @@ class Tistory:
         content_write = driver.find_element(By.XPATH, '/html/body')
         content_write.click()
 
-        is_wait = False
         from imagelib import ImageLib
-
         for data in datas:
-            if is_wait: time.sleep(2)
+            time.sleep(3)
             type = data[0]
             context = data[1]
             if type == 'text':
@@ -115,7 +113,6 @@ class Tistory:
                 ilib = ImageLib()
                 ilib.copy(context)
                 pyautogui.hotkey("ctrl", "v")
-                is_wait = True
 
         driver.switch_to.default_content
         time.sleep(3)
