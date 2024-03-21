@@ -5,7 +5,7 @@ from imagelib import ImageLib
 
 class ExtractPost:
 
-    def __init__(self, target_url, post_name="블로그", platform="t", savedir="D:/2.Private/job/td_company/data"):
+    def __init__(self, target_url, post_name="블로그", platform="t", savedir="D:/2.Private/job/td_company/data", savefolder='saved'):
         print("~~~~~~~~~~~~init~~~~~~~~~~~~~~~~~~")
         self._idx = 0
         self._target_url = target_url
@@ -13,6 +13,7 @@ class ExtractPost:
         self._platform = platform
         self._savedir = savedir
         self._savedImageDir = ''
+        self._saveFolder =savefolder
         self._text = ''
         self._images = []
 
@@ -47,7 +48,7 @@ class ExtractPost:
             url = tag.attrs['src']
             if 'data-lazy-src' in tag.attrs:
                 url = tag.attrs['data-lazy-src']
-            saved_folder_dir = self._savedir + "/" + self._post_name  + "/images"
+            saved_folder_dir = self._savedir + "/" + self._saveFolder  + "/images"
             self._savedImageDir = saved_folder_dir
             saved_file_name =  str(self._idx) + '.png'
             print(saved_folder_dir)
@@ -79,7 +80,7 @@ class ExtractPost:
             url = tag.attrs['src']
             if 'data-lazy-src' in tag.attrs:
                 url = tag.attrs['data-lazy-src']
-            saved_folder_dir = self._savedir + "/" + self._post_name  + "/images"
+            saved_folder_dir = self._savedir + "/" + self._saveFolder  + "/images"
             self._savedImageDir = saved_folder_dir
             saved_file_name =  str(self._idx) + '.png'
             print(saved_folder_dir)
@@ -144,7 +145,7 @@ class ExtractPost:
         text = "\n".join(contents)
         print(text)
         self._text = text
-        file_path = self._savedir + "/" + self._post_name
+        file_path = self._savedir + "/" + self._saveFolder
         if self.__checkOrDirs(file_path):
             t = open(file_path + '/content.txt', 'w', encoding='utf-8')
             t.write(text)

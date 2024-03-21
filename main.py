@@ -9,7 +9,7 @@ import sys
 args_id = '' #sys.argv[1]
 args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
-arg_saveDir = 'D:/2.Private/job/td_company/data' # TODO 인자로 받게 수정필요
+arg_saveDir = 'D:/work/TwoDollar/data' # TODO 인자로 받게 수정필요
 arg_targetPostId = 'travelhyuk'
 
 # 새글 가져오기
@@ -31,6 +31,7 @@ extractPostlist = []
 for idx, post in enumerate(postlist):
     # 변수 초기화
     title = post['title']
+    titleregex = post['titleregex']
     link = post['link']
     # 레디스 변수 넣고 처리(true인 경우 신규, false는 기처리라 패쓰)
     if rlib.scrape_and_store_data(title, link):
@@ -44,7 +45,8 @@ for idx, post in enumerate(postlist):
                 target_url = link,
                 post_name = title, 
                 platform=arg_platform,
-                savedir=arg_saveDir
+                savedir=arg_saveDir,
+                savefolder=titleregex
             )
             expost.parsing_blog()
             extractPostlist.append(expost)
@@ -73,7 +75,7 @@ tistory = Tistory(
             driver=driver
         )
 from autogpt import AutoGpt
-gpt = AutoGpt(driver=driver, gpt_url='https://chat.openai.com/?AIPRM_PromptID=1785987336174305280')
+gpt = AutoGpt(driver=driver, gpt_url='https://chat.openai.com/?AIPRM_PromptID=1784224785543462912')
 
 for expost in extractPostlist:
     title = expost.getTitle()
@@ -85,7 +87,7 @@ for expost in extractPostlist:
     datas.append(('text', gptText))
     for img in savedimages:
         datas.append(('image', img))
-        break # TODO 해당 라인 삭제 필수
+        #break # TODO 해당 라인 삭제 필수
     tistory.write(title=title, datas=datas) # 일단주석
 
     print('하나 끝')

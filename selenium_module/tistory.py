@@ -86,6 +86,8 @@ class Tistory:
             alert.dismiss() # 처음 알람이 있는경우 취소처리
         except NoAlertPresentException:
             print('알람이 없습니다.')
+        except Exception as e:
+            print('알람오류 - {}'.format(e))
 
         # 타이틀 입력
         titleElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[1]/div/main/div/div[2]/textarea') ))
@@ -108,10 +110,12 @@ class Tistory:
             type = data[0]
             context = data[1]
             if type == 'text':
+                print('text copy')
                 content_write.send_keys(context)
             elif type == 'image':
                 ilib = ImageLib()
                 ilib.copy(context)
+                print('image copy')
                 pyautogui.hotkey("ctrl", "v")
 
         driver.switch_to.default_content()
