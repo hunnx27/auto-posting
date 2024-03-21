@@ -39,7 +39,7 @@ class NaverPost:
                 print('Error....')
                 #print(e)
         print('네이버 포스팅 스크래핑 완료 : {}개'.format(len(rs)))
-
+        driver.quit()
         return rs
 
 

@@ -114,11 +114,15 @@ class Tistory:
                 ilib.copy(context)
                 pyautogui.hotkey("ctrl", "v")
 
-        driver.switch_to.default_content
+        driver.switch_to.default_content()
         time.sleep(3)
-
+        
         # 임시저장
-        #driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]").click()
+        import pdb
+        #pdb.set_trace()
+        tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
+        tempSave.click()
+        time.sleep(2)
         pyautogui.hotkey("alt", "tab")
 
     # 캡차 체크
