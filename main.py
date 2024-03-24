@@ -9,8 +9,10 @@ import sys
 args_id = '' #sys.argv[1]
 args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
-arg_saveDir = 'D:/work/TwoDollar/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'travelhyuk'
+arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
+arg_targetPostId = 'yosiki1928'
+arg_tistoryWriteUrl = 'https://superblo.tistory.com'
+arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
 
 # 새글 가져오기
 if arg_platform == 'n':
@@ -26,7 +28,7 @@ elif arg_platform == 't':
 # 새글 스크래핑
 from redislib import RedisLib
 rlib = RedisLib()
-rlib.clearData() # 주석하기(데이터초기화)
+#rlib.clearData() # 주석하기(데이터초기화)
 extractPostlist = []
 for idx, post in enumerate(postlist):
     # 변수 초기화
@@ -71,11 +73,11 @@ from selenium_module.tistory import Tistory
 import pdb
 #pdb.set_trace()
 tistory = Tistory(
-            url='https://superblo.tistory.com/manage',
+            url='{}/manage'.format(arg_tistoryWriteUrl),
             driver=driver
         )
 from autogpt import AutoGpt
-gpt = AutoGpt(driver=driver, gpt_url='https://chat.openai.com/?AIPRM_PromptID=1784224785543462912')
+gpt = AutoGpt(driver=driver, gpt_url=arg_gptAiprmUrl)
 
 for expost in extractPostlist:
     title = expost.getTitle()

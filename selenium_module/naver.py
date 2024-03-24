@@ -14,7 +14,7 @@ class NaverPost:
         driver = webdriver.Chrome()
         print('네이버 포스팅 스크래핑 시도 : {}'.format(url))
         driver.get(url)
-        time.sleep(2)
+        time.sleep(60)
 
         #print(driver.page_source)
 
