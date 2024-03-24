@@ -14,11 +14,12 @@ class NaverPost:
         driver = webdriver.Chrome()
         print('네이버 포스팅 스크래핑 시도 : {}'.format(url))
         driver.get(url)
-        time.sleep(60)
+        time.sleep(2)
 
         #print(driver.page_source)
-
-        lis = driver.find_elements(By.XPATH, '/html/body/div[1]/div[5]/div[4]/div[2]/div/div[2]/ul/li')
+#/html/body/div[1]/div[5]/div[2]/div[2]/div/div[2]/ul/li[1]
+#/html/body/div[1]/div[5]//*[@id='contentslist_block']//*div[2]/div/div[2]/ul/li
+        lis = driver.find_elements(By.XPATH, "/html/body/div[1]/div[5]//*[@id='contentslist_block']/div[2]/div/div[2]/ul/li")
         rs = []
         for li in lis:
             obj = {}
