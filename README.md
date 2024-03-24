@@ -21,6 +21,9 @@ https://blog.naver.com/chandong83/221955351945
 https://github.com/chandong83/download-naver-blog/blob/master/get_category_list.py
 
 # 설치된 라이브러리 백업
-pip frezze > requirements.txt
+pip freeze > requirements.txt
 # 최초 설치시
 pip install -r requirements.txt
+
+
+
