@@ -51,7 +51,6 @@ class ExtractPost:
             saved_folder_dir = self._savedir + "/" + self._saveFolder  + "/images"
             self._savedImageDir = saved_folder_dir
             saved_file_name =  str(self._idx) + '.png'
-            print(saved_folder_dir)
             ilib = ImageLib()
             savedFilePath = ''
             if self.__checkOrDirs(saved_folder_dir) :
@@ -143,7 +142,7 @@ class ExtractPost:
     def parsing_blog(self):
         contents = self.__get_content()
         text = "\n".join(contents)
-        print(text)
+        #print(text)
         self._text = text
         file_path = self._savedir + "/" + self._saveFolder
         if self.__checkOrDirs(file_path):

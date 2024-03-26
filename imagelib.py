@@ -19,7 +19,6 @@ class ImageLib:
 
     # 워터마트 박기
     def draw_watermark(self, url):
-        print("### DRAW WATERMARK START ###")
         # Image 로드
         response = requests.get(url)
         image = Image.open(BytesIO(response.content))
@@ -58,5 +57,4 @@ class ImageLib:
 
         # 합성
         combined = Image.alpha_composite(image, txt)
-        print("### DRAW WATERMARK END ###")
         return combined

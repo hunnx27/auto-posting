@@ -1,5 +1,5 @@
 import sys
-
+import json
 # 인자 입력받기
 #if len(sys.argv) != 3:
 #    print("길이 :", len(sys.argv))
@@ -51,18 +51,42 @@ for idx, post in enumerate(postlist):
                 savefolder=titleregex
             )
             expost.parsing_blog()
-            extractPostlist.append(expost)
 
-            if(idx==1): # 2번만 돌게 제한
-                break # TODO 주석처리, 혹은 라인삭제 필요
+            # redis 저장
+            title = expost.getTitle()
+            text = expost.getText()
+            savedImages = expost.getSavedImages()
+            
+            rlib.set_store_hashdata(link, 'text', expost.getText())
+            rlib.set_store_hashdata(link, 'savedImages', json.dumps(expost.getSavedImages()))
+
+            # 즉시 처리를 위한 리스트 저장
+            extractPostlist.append((link, title, text, savedImages))
+            break;
         except Exception as e:
             print(e)
-            rlib.removeKey(link) # 신규등록 과정에서 오류 시 레디스에서 키를 제거해서 다시 수행할 수 있게 함
+            rlib.remove_key(link) # 신규등록 과정에서 오류 시 레디스에서 키를 제거해서 다시 수행할 수 있게 함
+    else:
+        store_hashdata = rlib.get_store_hashdata(link)
+        isWriteByte = store_hashdata.get(b'isWrite')
+        titleByte = store_hashdata.get(b'title')
+        textByte = store_hashdata.get(b'text')
+        savedImagesByte = store_hashdata.get(b'savedImages')
 
-    # TODO 자동화 포스팅 로직 넣어야함
-        print('TODO 티스토리 자동화 포스팅 작업중')
+        if not(isWriteByte != None and titleByte != None and textByte != None and savedImagesByte != None):
+            print('isWriteByte : {}'.format(isWriteByte))
+            print('titleByte : {}'.format(titleByte))
+            print('textByte : {}'.format(textByte))
+            print('savedImagesByte : {}'.format(savedImagesByte))
+            continue # None인경우는 패쓰..
 
-
+        if not (isWriteByte != None and isWriteByte.decode() == 'True') :
+            print('수집 후 미작성 데이터 : {}'.format(title))
+            titleByte = store_hashdata.get(b'title')
+            textByte = store_hashdata.get(b'text')
+            savedImagesByte = store_hashdata.get(b'savedImages')
+            extractPostlist.append((link, titleByte.decode(), textByte.decode(), json.loads(savedImagesByte)))
+        
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 option = Options()
@@ -79,20 +103,20 @@ tistory = Tistory(
 from autogpt import AutoGpt
 gpt = AutoGpt(driver=driver, gpt_url=arg_gptAiprmUrl)
 
-for expost in extractPostlist:
-    title = expost.getTitle()
-    savedimages = expost.getSavedImages()
-    text = expost.getText()
+for expostTuple in extractPostlist:
+    link = expostTuple[0]
+    title = expostTuple[1]
+    text = expostTuple[2]
+    savedimages = expostTuple[3]
     gptText = gpt.searchGPT2(text)
     print(gptText)
     datas = []
     datas.append(('text', gptText))
     for img in savedimages:
         datas.append(('image', img))
-        #break # TODO 해당 라인 삭제 필수
     tistory.write(title=title, datas=datas) # 일단주석
-
-    print('하나 끝')
+    rlib.set_store_hashdata(link, 'isWrite', str(True))
+    print('작성 완료')
     
 
     

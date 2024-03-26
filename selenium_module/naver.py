@@ -32,13 +32,12 @@ class NaverPost:
                 test2 = li.find_element(By.XPATH, './div[1]/div[2]/div[2]/a')
                 title = test1.text
                 link = test2.get_attribute(name="href")
-                print("{} | {}".format(title, link))
+                #print("{} | {}".format(title, link))
                 obj['title'] = title
                 #또는 새폴더 불용 특수문자만 넣기
                 import re
                 titleregex = re.sub(r'[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]','', title)
                 titleregex = re.sub(r'[\/:*?"><|]','', titleregex)
-                print('#####titleregex############## - {}'.format(titleregex))
                 obj['titleregex'] = titleregex
                 obj['link'] = link
                 rs.append(obj)

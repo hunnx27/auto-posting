@@ -16,15 +16,7 @@ class Tistory:
         else:
             self._driver = webdriver.Chrome()
 
-    
-    datas = [
-        ("text","hiroo\n\n\nhello"),
-        ("image","d:/2.Private/job/td_company/data/한소희 류준열 타임라인 정리 환승연애 인스타 블로그 주소/images/1.png"),
-        ("text","hiroo\n\n\nhello"),
-        ("text","hiroo\n\n\nhello"),
-        ("image","d:/2.Private/job/td_company/data/한소희 류준열 타임라인 정리 환승연애 인스타 블로그 주소/images/1.png"),
-        ]
-
+    # Deprecated
     def login(self):
         driver = self._driver
 
@@ -89,10 +81,25 @@ class Tistory:
         except Exception as e:
             print('알람오류 - {}'.format(e))
 
+        # 마크다운으로 변경하기
+        print('마크다운으로 변경하기')
+        editorModeChangeBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#editor-mode-layer-btn-open') ))
+        editorModeChangeBtnElm.click()
+        time.sleep(1)
+        markdownModeBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#editor-mode-markdown') ))
+        markdownModeBtnElm.click()
+        time.sleep(1)
+        try:
+            alert = wait.until(EC.alert_is_present())
+            alert.accept() # 처음 알람이 있는경우 취소처리
+        except NoAlertPresentException:
+            print('알람이 없습니다.')
+        except Exception as e:
+            print('알람오류 - {}'.format(e))
+
         # 타이틀 입력
         titleElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[1]/div/main/div/div[2]/textarea') ))
         titleElm.click()
-
         import pyautogui
         import pyperclip
         pyperclip.copy(title)
