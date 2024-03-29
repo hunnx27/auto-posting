@@ -56,6 +56,102 @@ class Tistory:
         loginBtnElm.click()
         #self.__captcha_check(driver) # 캡차 체크
 
+    def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
+        text = gptText
+        imgArr = self.getImageTags(savedimages=savedimages);
+        for (idx, imgtag) in enumerate(imgArr):
+            print(idx, imgtag)
+
+        print('#text1 : {}'.format(text))
+        text = text.replace('[이미지 삽입 위치 {}]'.format(idx+1), imgtag+']')
+        print('#text2 : {}'.format(text))
+        return text
+    
+    
+
+    def getImageTags(self, savedimages):
+        import pyautogui
+        
+        print('step1')
+        time.sleep(5)
+        pyautogui.hotkey("alt", "tab")
+        driver = self._driver
+        #import pdb; pdb.set_trace()
+        driver.get("{}".format(self._url))
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        wait = WebDriverWait(driver, 3)
+        writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
+        writeMoveBtnElm.click()
+
+        print('step2')
+        # 티스토리 글쓰기
+        ## 최초 알람 체크 및 취소
+        from selenium.common.exceptions import NoAlertPresentException
+        from selenium.webdriver.common.alert import Alert
+        print('step3')
+        try:
+            alert = wait.until(EC.alert_is_present())
+            alert.dismiss() # 처음 알람이 있는경우 취소처리
+        except NoAlertPresentException:
+            print('알람이 없습니다.')
+        except Exception as e:
+            print('알람오류 - {}'.format(e))
+
+        # 내용입력
+        content = driver.find_element(By.TAG_NAME, "iframe")
+        driver.switch_to.frame(content)
+        content_write = driver.find_element(By.XPATH, '/html/body')
+        content_write.click()
+
+        from imagelib import ImageLib
+        import pyautogui
+        import pyperclip
+
+        for imgUrl in savedimages:
+            time.sleep(3)
+            ilib = ImageLib()
+            ilib.copy(imgUrl)
+            print('image copy')
+            pyautogui.hotkey("ctrl", "v")
+
+        driver.switch_to.default_content()
+
+        # HTML 모드 에디터 변경하기
+        print('HTML 모드 에디터 변경하기')
+        editorModeChangeBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#editor-mode-layer-btn-open') ))
+        editorModeChangeBtnElm.click()
+        time.sleep(1)
+        markdownModeBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#editor-mode-html-text') ))
+        markdownModeBtnElm.click()
+        time.sleep(1)
+        try:
+            alert = wait.until(EC.alert_is_present())
+            alert.accept() # 처음 알람이 있는경우 취소처리
+        except NoAlertPresentException:
+            print('알람이 없습니다.')
+        except Exception as e:
+            print('알람오류 - {}'.format(e))
+
+        print('## HTML 에디터 화면 소스 출력 ##')
+        time.sleep(3)
+        textarea = driver.find_element(By.CSS_SELECTOR, '#html-editor-container > div.mce-edit-area > div > textarea')
+        textarea_txt = textarea.get_attribute('innerHTML')
+        
+        #print(textarea)
+        print('# textAREA 파싱!!!!!!!!!')
+        print(textarea_txt)
+        
+        txt = textarea_txt
+        imgs = txt.replace('&lt;p&gt;', '').replace('&lt;/p&gt;', '')
+        imgsArr = imgs.split(']')
+        for (idx, img) in  enumerate(imgsArr):
+            imgsArr[idx] = img + ']'
+
+        pyautogui.hotkey("alt", "tab")
+        return imgsArr
+
+
     def write(self, title, datas):
         print('step1')
         driver = self._driver

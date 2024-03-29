@@ -16,8 +16,6 @@ class AutoGpt:
         self._gpt_url = gpt_url
 
     def searchGPT(self, text):
-        pyautogui.hotkey("alt", "tab")
-        pyperclip.copy(text)
         time.sleep(1)
         pyautogui.hotkey("ctrl", "v")
         time.sleep(1)
@@ -85,5 +83,7 @@ class AutoGpt:
         except Exception as e:
             print(e)
 
+        print('alt + tab?!')
+        pyautogui.hotkey("alt", "tab")
         return gpttxt
 

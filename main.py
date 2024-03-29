@@ -10,9 +10,10 @@ args_id = '' #sys.argv[1]
 args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'yosiki1928'
+arg_targetPostId = 'chummilmil99'
 arg_tistoryWriteUrl = 'https://superblo.tistory.com'
-arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
+#arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
+arg_gptAiprmUrl = 'https://chat.openai.com'
 
 # 새글 가져오기
 if arg_platform == 'n':
@@ -108,14 +109,20 @@ for expostTuple in extractPostlist:
     title = expostTuple[1]
     text = expostTuple[2]
     savedimages = expostTuple[3]
+
     gptText = gpt.searchGPT2(text)
+    gptText = ''
     print(gptText)
+    
+    #for img in savedimages:
+        #datas.append(('image', img))
+    
+    mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages[:1], gptText=gptText)
     datas = []
-    datas.append(('text', gptText))
-    for img in savedimages:
-        datas.append(('image', img))
-    tistory.write(title=title, datas=datas) # 일단주석
-    rlib.set_store_hashdata(link, 'isWrite', str(True))
+    datas.append(('text', mergedText))
+    print(mergedText)
+    #tistory.write(title=title, datas=datas) # 일단주석
+    #rlib.set_store_hashdata(link, 'isWrite', str(True))
     print('작성 완료')
     
 

@@ -59,7 +59,7 @@ class ExtractPost:
                 self._images.append(savedFilePath)
                 
             #print('pass')
-            return '\n[이미지 삽입][' + str(self._idx) + ']\n'
+            return '\n[이미지 삽입 위치 {}]\n'.format(str(self._idx))
         if tag.get_text().strip() == '':
             return ''
         elif tag.name == 'p':

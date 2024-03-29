@@ -10,7 +10,7 @@ class NaverPost:
         super().__init__()
 
     def getNewPost(self):
-        url = 'https://m.blog.naver.com/PostList.naver?blogId={}&tab=1'.format(self.__blogId)
+        url = 'https://m.blog.naver.com/PostList.naver?blogId={}&categoryNo=0&listStyle=card&tab=1'.format(self.__blogId)
         driver = webdriver.Chrome()
         print('네이버 포스팅 스크래핑 시도 : {}'.format(url))
         driver.get(url)
@@ -19,7 +19,7 @@ class NaverPost:
         #print(driver.page_source)
 #/html/body/div[1]/div[5]/div[2]/div[2]/div/div[2]/ul/li[1]
 #/html/body/div[1]/div[5]//*[@id='contentslist_block']//*div[2]/div/div[2]/ul/li
-        lis = driver.find_elements(By.XPATH, "/html/body/div[1]/div[5]//*[@id='contentslist_block']/div[2]/div/div[2]/ul/li")
+        lis = driver.find_elements(By.XPATH, "/html/body/div[1]/div[5]//*[@id='contentslist_block']//*[@class='list_block__XlpUJ']/div/div[2]/ul/li")
         rs = []
         for li in lis:
             col1 = {}
