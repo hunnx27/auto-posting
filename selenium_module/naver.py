@@ -22,25 +22,40 @@ class NaverPost:
         lis = driver.find_elements(By.XPATH, "/html/body/div[1]/div[5]//*[@id='contentslist_block']/div[2]/div/div[2]/ul/li")
         rs = []
         for li in lis:
-            obj = {}
+            col1 = {}
+            col2 = {}
             try:
                 #idx = i+1
                 #print(idx)
                 #test1 = driver.find_element(By.XPATH, "/html/body/div[1]/div[5]/div[4]/div[2]/div/div[2]/ul/li[{}]/div[1]/div[2]/div[2]/a/strong/span".format(idx))
                 #test2 = driver.find_element(By.XPATH, "/html/body/div[1]/div[5]/div[4]/div[2]/div/div[2]/ul/li[{}]/div[1]/div[2]/div[2]/a".format(idx))
-                test1 =  li.find_element(By.XPATH, './div[1]/div[2]/div[2]/a/strong/span')
-                test2 = li.find_element(By.XPATH, './div[1]/div[2]/div[2]/a')
-                title = test1.text
-                link = test2.get_attribute(name="href")
+                col1_txt =  li.find_element(By.XPATH, './div[1]/div[2]/div[2]/a/strong/span')
+                col1_a = li.find_element(By.XPATH, './div[1]/div[2]/div[2]/a')
+                title = col1_txt.text
+                link = col1_a.get_attribute(name="href")
                 #print("{} | {}".format(title, link))
-                obj['title'] = title
+                col1['title'] = title
                 #또는 새폴더 불용 특수문자만 넣기
                 import re
                 titleregex = re.sub(r'[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]','', title)
                 titleregex = re.sub(r'[\/:*?"><|]','', titleregex)
-                obj['titleregex'] = titleregex
-                obj['link'] = link
-                rs.append(obj)
+                col1['titleregex'] = titleregex
+                col1['link'] = link
+                rs.append(col1)
+
+                col2_txt =  li.find_element(By.XPATH, './div[2]/div[2]/div[2]/a/strong/span')
+                col2_a = li.find_element(By.XPATH, './div[2]/div[2]/div[2]/a')
+                title = col2_txt.text
+                link = col2_a.get_attribute(name="href")
+                #print("{} | {}".format(title, link))
+                col2['title'] = title
+                #또는 새폴더 불용 특수문자만 넣기
+                import re
+                titleregex = re.sub(r'[-=+,#/\?:^$.@*\"※~&%ㆍ!』\\‘|\(\)\[\]\<\>`\'…》]','', title)
+                titleregex = re.sub(r'[\/:*?"><|]','', titleregex)
+                col2['titleregex'] = titleregex
+                col2['link'] = link
+                rs.append(col2)
             except Exception as e:
                 print('Error....')
                 #print(e)
