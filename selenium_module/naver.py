@@ -14,7 +14,19 @@ class NaverPost:
         driver = webdriver.Chrome()
         print('네이버 포스팅 스크래핑 시도 : {}'.format(url))
         driver.get(url)
-        time.sleep(2)
+
+        
+        print('wait 60 시작')
+        #driver.implicitly_wait(10)
+
+        from selenium.webdriver.support.ui import WebDriverWait
+        from selenium.webdriver.support import expected_conditions as EC
+        wait = WebDriverWait(driver, 60)
+        #browserLoadCheck = wait.until(EC.visibility_of_element_located( (By.XPATH, '/html/body/div[1]/div[5]/div[1]/div')))
+
+        browserLoadCheck = wait.until(EC.visibility_of_element_located( (By.XPATH, "/html/body/div[1]/div[5]//*[@id='contentslist_block']//*[@class='list_block__XlpUJ']/div/div[2]/ul/li") ))
+
+        print('wait 60 끝')
 
         #print(driver.page_source)
 #/html/body/div[1]/div[5]/div[2]/div[2]/div/div[2]/ul/li[1]

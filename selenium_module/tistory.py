@@ -59,12 +59,15 @@ class Tistory:
     def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
         text = gptText
         imgArr = self.getImageTags(savedimages=savedimages);
-        for (idx, imgtag) in enumerate(imgArr):
-            print(idx, imgtag)
 
-        print('#text1 : {}'.format(text))
-        text = text.replace('[이미지 삽입 위치 {}]'.format(idx+1), imgtag+']')
-        print('#text2 : {}'.format(text))
+        for (idx, imgtag) in enumerate(imgArr):
+            if len(imgArr) == idx+1:
+                break
+            print(idx, imgtag)
+            print('#text1 : {}'.format(text))
+            text = text.replace('[이미지 삽입 위치 {}]'.format(idx+1), imgtag)
+            print('#text2 : {}'.format(text))
+            
         return text
     
     
@@ -72,11 +75,12 @@ class Tistory:
     def getImageTags(self, savedimages):
         import pyautogui
         
-        print('step1')
+        print('[이미지태그가져오기]step1')
         time.sleep(5)
         pyautogui.hotkey("alt", "tab")
         driver = self._driver
-        #import pdb; pdb.set_trace()
+        driver.get("about:blank")
+        driver.implicitly_wait(10)
         driver.get("{}".format(self._url))
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
@@ -84,12 +88,12 @@ class Tistory:
         writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
         writeMoveBtnElm.click()
 
-        print('step2')
+        print('[이미지태그가져오기]step2')
         # 티스토리 글쓰기
         ## 최초 알람 체크 및 취소
         from selenium.common.exceptions import NoAlertPresentException
         from selenium.webdriver.common.alert import Alert
-        print('step3')
+        print('[이미지태그가져오기]step3')
         try:
             alert = wait.until(EC.alert_is_present())
             alert.dismiss() # 처음 알람이 있는경우 취소처리
@@ -149,26 +153,32 @@ class Tistory:
             imgsArr[idx] = img + ']'
 
         pyautogui.hotkey("alt", "tab")
+        time.sleep(3)
         return imgsArr
 
 
     def write(self, title, datas):
-        print('step1')
+        time.sleep(1)
+        print('[write]step1')
         driver = self._driver
+        driver.get("about:blank")
+        driver.implicitly_wait(10)
         driver.get("{}".format(self._url))
         # /html/body/div[2]/div/div/div/div/div/a[2]
 
+        import pyautogui
+        pyautogui.hotkey("alt", "tab")
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
-        wait = WebDriverWait(driver, 3)
+        wait = WebDriverWait(driver, 5)
         writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
         writeMoveBtnElm.click()
-        print('step2')
+        print('[write]step2')
         # 티스토리 글쓰기
         ## 최초 알람 체크 및 취소
         from selenium.common.exceptions import NoAlertPresentException
         from selenium.webdriver.common.alert import Alert
-        print('step3')
+        print('[write]step3')
         try:
             alert = wait.until(EC.alert_is_present())
             alert.dismiss() # 처음 알람이 있는경우 취소처리
@@ -202,11 +212,15 @@ class Tistory:
         pyautogui.hotkey("ctrl", "v")
 
         # 내용입력
-        content = driver.find_element(By.TAG_NAME, "iframe")
-        driver.switch_to.frame(content)
-        content_write = driver.find_element(By.XPATH, '/html/body')
-        content_write.click()
-
+        #content = driver.find_element(By.TAG_NAME, "iframe")
+        #driver.switch_to.frame(content)
+        #content_write = driver.find_element(By.XPATH, '/html/body')
+       # content_write.click()
+        time.sleep(2)
+        pyautogui.hotkey("tab")
+        time.sleep(1)
+        pyautogui.hotkey("tab")
+        time.sleep(1)
         from imagelib import ImageLib
         for data in datas:
             time.sleep(3)
@@ -214,7 +228,9 @@ class Tistory:
             context = data[1]
             if type == 'text':
                 print('text copy')
-                content_write.send_keys(context)
+                #content_write.send_keys(context)
+                pyperclip.copy(context)
+                pyautogui.hotkey("ctrl", "v")
             elif type == 'image':
                 ilib = ImageLib()
                 ilib.copy(context)
@@ -225,12 +241,11 @@ class Tistory:
         time.sleep(3)
         
         # 임시저장
-        import pdb
-        #pdb.set_trace()
         tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
         tempSave.click()
         time.sleep(2)
         pyautogui.hotkey("alt", "tab")
+        time.sleep(2)
 
     # 캡차 체크
     def __captcha_check(self, driver, delay=3):

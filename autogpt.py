@@ -28,7 +28,7 @@ class AutoGpt:
         return paste
     
     def searchGPT2(self, text):
-        print('search GPT 시작')
+        print('[GPT ver2]step1')
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
         from selenium.webdriver.common.by import By
@@ -47,7 +47,9 @@ class AutoGpt:
         except Exception as e:
             print('알람 에러 - {}'.format(e))
 
-
+        print('[GPT ver2]step2')
+        driver.get("about:blank")
+        driver.implicitly_wait(10)
         driver.get(self._gpt_url)
         time.sleep(2)
         # 티스토리 글쓰기
@@ -71,15 +73,14 @@ class AutoGpt:
         time.sleep(3)
         gpttxt = ''
         try:
-            wait = WebDriverWait(driver, 60)
-            import pdb
-            #pdb.set_trace()
+            wait = WebDriverWait(driver, 120)
             elm = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[2]/main/div[2]/div[2]/form/div/div[2]/div/button")))
             print(elm.text)
             print('응답완료..5초뒤 복사!')
             time.sleep(3)
             pyautogui.hotkey("ctrl", "shift", "c")
             gpttxt = pyperclip.paste()
+            print('paste text : {}'.format(gpttxt))
         except Exception as e:
             print(e)
 
