@@ -58,14 +58,20 @@ class Tistory:
 
     def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
         text = gptText
-        imgArr = self.getImageTags(savedimages=savedimages);
+        imgArr = self.getImageTags(savedimages=savedimages)
 
         for (idx, imgtag) in enumerate(imgArr):
             if len(imgArr) == idx+1:
                 break
             print(idx, imgtag)
             print('#text1 : {}'.format(text))
-            text = text.replace('[이미지 삽입 위치 {}]'.format(idx+1), imgtag)
+            findtxt = '[이미지 삽입 위치 {}]'.format(idx+1)
+            notfoundlist = []
+            if text.find(findtxt) != -1:
+                text = text.replace(findtxt, imgtag)
+            else:
+                text = text + '\n' + imgtag
+                
             print('#text2 : {}'.format(text))
             
         return text
