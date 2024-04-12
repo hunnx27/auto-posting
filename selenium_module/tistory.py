@@ -81,12 +81,18 @@ class Tistory:
         driver = self._driver
         driver.get("about:blank")
         driver.implicitly_wait(10)
-        driver.get("{}".format(self._url))
+        driver.get("{}{}".format(self._url, '/post'))
+        driver.implicitly_wait(10)
+        
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
         wait = WebDriverWait(driver, 3)
-        writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
-        writeMoveBtnElm.click()
+        #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
+        
+        #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[2]/div/a[1]')))
+        #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#kakaoHead > div > div.info_tistory > div > a.btn_tistory.btn_log_info')))
+        
+        #writeMoveBtnElm.click()
 
         print('[이미지태그가져오기]step2')
         # 티스토리 글쓰기
@@ -163,7 +169,8 @@ class Tistory:
         driver = self._driver
         driver.get("about:blank")
         driver.implicitly_wait(10)
-        driver.get("{}".format(self._url))
+        driver.get("{}{}".format(self._url, '/post'))
+        driver.implicitly_wait(10)
         # /html/body/div[2]/div/div/div/div/div/a[2]
 
         import pyautogui
@@ -171,8 +178,8 @@ class Tistory:
         from selenium.webdriver.support.ui import WebDriverWait
         from selenium.webdriver.support import expected_conditions as EC
         wait = WebDriverWait(driver, 5)
-        writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
-        writeMoveBtnElm.click()
+        #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
+        #writeMoveBtnElm.click()
         print('[write]step2')
         # 티스토리 글쓰기
         ## 최초 알람 체크 및 취소

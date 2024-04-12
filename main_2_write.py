@@ -11,7 +11,7 @@ args_id = '' #sys.argv[1]
 args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'sewing9233'
 arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 #arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
 arg_gptAiprmUrl = 'https://chat.openai.com'
@@ -60,6 +60,10 @@ for idx, post in enumerate(postlist):
         extractPostlist.append((link, titleByte.decode(), textByte.decode(), json.loads(savedImagesByte)))
         
 print('총수집데이터:{} | 미작성데이터:{} | 작성된데이터:{}'.format(len(postlist), len(extractPostlist), len(postlist)-len(extractPostlist)))
+if len(extractPostlist)==0:
+    print('작성할 게시물이 없습니다.')
+    sys.exit()
+
 print('자동화 포스팅 시작 3초전!')
 time.sleep(3)
 from selenium.webdriver.chrome.options import Options
@@ -83,8 +87,8 @@ for (idx, expostTuple) in enumerate(extractPostlist):
     text = expostTuple[2]
     savedimages = expostTuple[3]
 
-    gptText = gpt.searchGPT2(text)
-    #gptText = text # FIXME gpt 처리 임시 주석
+    #gptText = gpt.searchGPT2(text)
+    gptText = text # FIXME gpt 처리 임시 주석
     print('gptText : {}'.format(gptText))
     #for img in savedimages:
         #datas.append(('image', img))
