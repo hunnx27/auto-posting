@@ -99,8 +99,9 @@ for (idx, expostTuple) in enumerate(extractPostList):
     text = expostTuple[2]
     savedimages = expostTuple[3]
 
-    #gptText = gpt.searchGPT2(text)
-    gptText = text # FIXME gpt 처리 임시 주석
+    gptText = text 
+    gptText = gpt.searchGPT2(text) # gpt 처리 임시 주석(테스트 시 주석처리)
+    
     print('gptText : {}'.format(gptText))
     #for img in savedimages:
         #datas.append(('image', img))
