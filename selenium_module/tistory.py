@@ -125,7 +125,7 @@ class Tistory:
         import pyperclip
 
         for imgUrl in savedimages:
-            time.sleep(3)
+            time.sleep(0.3)
             ilib = ImageLib()
             ilib.copy(imgUrl)
             print('image copy')
@@ -229,7 +229,7 @@ class Tistory:
         #driver.switch_to.frame(content)
         #content_write = driver.find_element(By.XPATH, '/html/body')
        # content_write.click()
-        time.sleep(2)
+        time.sleep(1)
         pyautogui.hotkey("tab")
         time.sleep(1)
         pyautogui.hotkey("tab")

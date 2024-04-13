@@ -10,8 +10,8 @@ args_id = '' #sys.argv[1]
 args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'sewing9233'
-arg_tistoryWriteUrl = 'https://superblo.tistory.com'
+arg_targetPostId = 'yosiki1928'
+arg_tistoryWriteUrl = 'https://one.tddiary.com'
 #arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
 arg_gptAiprmUrl = 'https://chat.openai.com'
 
