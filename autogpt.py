@@ -80,7 +80,7 @@ class AutoGpt:
             time.sleep(3)
             pyautogui.hotkey("ctrl", "shift", "c")
             gpttxt = pyperclip.paste()
-            print('paste text : {}'.format(gpttxt))
+            #print('paste text : {}'.format(gpttxt))
         except Exception as e:
             print(e)
 

@@ -102,10 +102,6 @@ for (idx, expostTuple) in enumerate(extractPostList):
     gptText = text 
     gptText = gpt.searchGPT2(text) # gpt 처리 임시 주석(테스트 시 주석처리)
     
-    print('gptText : {}'.format(gptText))
-    #for img in savedimages:
-        #datas.append(('image', img))
-    
     #mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages[:1], gptText=gptText) #테스트용
     mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages, gptText=gptText)
     

@@ -58,13 +58,17 @@ class Tistory:
 
     def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
         text = gptText
-        imgArr = self.getImageTags(savedimages=savedimages)
+        imgArr = self.__getImageTags(savedimages=savedimages)
 
         for (idx, imgtag) in enumerate(imgArr):
             if len(imgArr) == idx+1:
                 break
-            print(idx, imgtag)
-            print('#text1 : {}'.format(text))
+            
+            try:
+                imgtag = self.__imageLinkInsert(imgtag=imgtag)
+            except Exception as e:
+                print('__imageLinkInsert err : {}'.format(e))
+
             findtxt = '[이미지 삽입 위치 {}]'.format(idx+1)
             notfoundlist = []
             if text.find(findtxt) != -1:
@@ -72,13 +76,11 @@ class Tistory:
             else:
                 text = text + '\n' + imgtag
                 
-            print('#text2 : {}'.format(text))
+            #print('#text2 : {}'.format(text))
             
         return text
-    
-    
 
-    def getImageTags(self, savedimages):
+    def __getImageTags(self, savedimages):
         import pyautogui
         
         print('[이미지태그가져오기]step1')
@@ -94,10 +96,8 @@ class Tistory:
         from selenium.webdriver.support import expected_conditions as EC
         wait = WebDriverWait(driver, 3)
         #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[3]/div/a[1]')))
-        
         #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body/div[2]/div[1]/div/div[2]/div/a[1]')))
         #writeMoveBtnElm = wait.until(EC.element_to_be_clickable( (By.CSS_SELECTOR, '#kakaoHead > div > div.info_tistory > div > a.btn_tistory.btn_log_info')))
-        
         #writeMoveBtnElm.click()
 
         print('[이미지태그가져오기]step2')
@@ -168,6 +168,16 @@ class Tistory:
         time.sleep(3)
         return imgsArr
 
+    def __imageLinkInsert(self, imgtag):
+        DEFAULT_LINK = "https://blog.kakaocdn.net/dn"
+        linkarr = imgtag.split('|')
+        imgarr = linkarr[1].split('kage@')
+        imgpath = imgarr[1]
+        link = "{}/{}".format(DEFAULT_LINK, imgpath)
+        REPLACE_TXT = '"style":"alignCenter"}_##]'
+        REPLACE_TXT_NEW = '"style":"alignCenter","link":"{}","isLinkNewWindow":true}}_##]'.format(link)
+        result = imgtag.replace(REPLACE_TXT, REPLACE_TXT_NEW)
+        return result
 
     def write(self, title, datas):
         time.sleep(1)
@@ -231,12 +241,12 @@ class Tistory:
        # content_write.click()
         time.sleep(1)
         pyautogui.hotkey("tab")
-        time.sleep(1)
+        time.sleep(0.3)
         pyautogui.hotkey("tab")
-        time.sleep(1)
+        
         from imagelib import ImageLib
         for data in datas:
-            time.sleep(3)
+            time.sleep(1)
             type = data[0]
             context = data[1]
             if type == 'text':
@@ -256,7 +266,7 @@ class Tistory:
         # 임시저장
         tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
         tempSave.click()
-        time.sleep(2)
+        time.sleep(1)
         pyautogui.hotkey("alt", "tab")
         time.sleep(2)
 
