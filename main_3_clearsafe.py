@@ -1,7 +1,6 @@
 
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'zentlehong'
 arg_saveDir = 'C:/tdcompany/data'
-arg_deletepost = 'https://m.blog.naver.com/PostView.naver?blogId=chummilmil99&logNo=223414142101&navType=by'
 
 from redislib import RedisLib
 rlib = RedisLib()
@@ -12,8 +11,11 @@ errlist = []
 for key in keys:
     try:
         store_hashdata = rlib.get_store_hashdata(key)
+        isWriteByte = store_hashdata.get(b'isWrite')
         titleByte = store_hashdata.get(b'title')
-        if arg_deletepost == key.decode():
+        textByte = store_hashdata.get(b'text')
+        savedImagesByte = store_hashdata.get(b'savedImages')
+        if isWriteByte!= None and isWriteByte.decode() != 'True':
             print("삭제 : {} | {}".format(titleByte.decode(), key))
             rlib.remove_key(key)
             succlist.append(key)
@@ -22,4 +24,4 @@ for key in keys:
         errlist.append(key)
 
 
-print("## 삭제처리 - 처리갯수 : {}개, 에러갯수 : {}개".format(len(succlist), len(errlist)) )
+print("## 삭제처리 - 총 갯수 : {}개, 처리갯수 : {}개, 에러갯수 : {}개".format(len(keys), len(succlist), len(errlist)) )

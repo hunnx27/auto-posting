@@ -13,7 +13,7 @@ for (idx, key) in enumerate(keys):
     titleByte = store_hashdata.get(b'title')
     textByte = store_hashdata.get(b'text')
     savedImagesByte = store_hashdata.get(b'savedImages')
-    print("[{}] {} | {} | 작성:{} | 에러:{}".format(idx, titleByte.decode(), key.decode(), isWrite, isError))
+    print("[{}] {} | 작성: {} | 에러: {} | {}".format(idx, titleByte.decode()[0:10], isWrite, isError, key.decode()))
 
 print("## 총 갯수 : {}".format(len(keys)))
 
