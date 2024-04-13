@@ -15,6 +15,21 @@ class NaverPost:
         print('네이버 포스팅 스크래핑 시도 : {}'.format(url))
         driver.get(url)
 
+        '''
+        # 100개 가져올때 사용할것 TODO 아직 기능 구현하지 않음, 함수 나눌것..
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(3)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(3)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(3)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(3)
+        driver.execute_script("window.scrollTo(0, document.body.scrollHeight)")
+        time.sleep(3)
+        '''
+
+        
         
         print('wait 60 시작')
         #driver.implicitly_wait(10)
