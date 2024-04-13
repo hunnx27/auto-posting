@@ -5,13 +5,12 @@ from imagelib import ImageLib
 
 class ExtractPost:
 
-    def __init__(self, target_url, post_name="블로그", platform="t", savedir="D:/2.Private/job/td_company/data", savefolder='saved'):
-        print("~~~~~~~~~~~~init~~~~~~~~~~~~~~~~~~")
+    def __init__(self, target_url, post_name="블로그", platform="t", savedir="D:/2.Private/job/td_company/data", postid="", savefolder='saved'):
         self._idx = 0
         self._target_url = target_url
         self._post_name = post_name
         self._platform = platform
-        self._savedir = savedir
+        self._savedir = savedir + "/" + postid if postid!='' else savedir
         self._savedImageDir = ''
         self._saveFolder =savefolder
         self._text = ''
@@ -119,10 +118,10 @@ class ExtractPost:
         # 콘텐츠 선택
         contents = []
         if self._platform == 't':
-            print('#############티스토리#########')
+            #print('#############티스토리#########')
             contents = soup.select_one('div.blogview_content')
         else:
-            print('#############네이버#########')
+            #print('#############네이버#########')
             contents = soup.select_one('div.se-main-container')
 
         result = list(map(self.__html_parser, contents.find_all(['img', 'p', 'h3', 'h2', 'h1'])))

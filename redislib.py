@@ -8,15 +8,20 @@ class RedisLib:
 
     def scrape_and_store_data(self, title, url):
         isSuccess = False
-        savedData = self.__r.hget(url, 'title')
-        print('savedData : {}'.format(savedData))
-        if savedData != None:
-            print("이미 스크랩된 데이터입니다.")
-        else:
+        savedDataByte = self.__r.hget(url, 'title')
+        #print('savedData : {}'.format(savedData))
+        isErrorByte = self.__r.hget(url, 'isError')
+        if savedDataByte == None: 
             self.__r.hset(url, 'title', title)
             self.__r.hset(url, 'isWrite', str(False))
+            self.__r.hset(url, 'isError', str(False))
             isSuccess = True
-            #print("데이터가 성공적으로 스크랩되었습니다.")
+        elif isErrorByte!= None and isErrorByte.decode() == 'True':
+            print("오류 데이터 재수집: {} | {}".format(title, url))
+            isSuccess = True
+        else:
+            print("이미 스크랩된 데이터 : {} | {}".format(title, url))
+        
         return isSuccess
     
     def remove_key(self, url):
@@ -31,4 +36,6 @@ class RedisLib:
     
     def set_store_hashdata(self, url, key, value):
         self.__r.hset(url, key, value)
-    
+
+    def search_hashkeys(self, targetId):
+        return self.__r.keys("*{}*".format(targetId))

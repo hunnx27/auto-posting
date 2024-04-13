@@ -1,33 +1,19 @@
 import sys
 import json
 import time
-# 인자 입력받기
-#if len(sys.argv) != 3:
-#    print("길이 :", len(sys.argv))
-#    print("ID와 비밀번호를 인자로 입력하세요.")
-#    sys.exit()
 
-args_id = '' #sys.argv[1]
-args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'yosiki1928'
-arg_tistoryWriteUrl = 'https://one.tddiary.com'
-#arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
+arg_targetPostId = 'chummilmil99'
+arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
-
-# 새글 가져오기
-if arg_platform == 'n':
-    # 1. 네이버 포스팅 스크래핑 
-    from selenium_module.naver import NaverPost
-    post = NaverPost(arg_targetPostId)
-    postlist = post.getNewPost()
-elif arg_platform == 't':
-    # 2. 티스토리 포스팅 스크래핑 TODO 아직 미구현
-    sys.exit(0)
 
 
 # 새글 스크래핑
+"""
+# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
+# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
+# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
 from redislib import RedisLib
 rlib = RedisLib()
 #rlib.clearData() # 주석하기(데이터초기화)
@@ -58,14 +44,39 @@ for idx, post in enumerate(postlist):
         textByte = store_hashdata.get(b'text')
         savedImagesByte = store_hashdata.get(b'savedImages')
         extractPostlist.append((link, titleByte.decode(), textByte.decode(), json.loads(savedImagesByte)))
-        
-print('총수집데이터:{} | 미작성데이터:{} | 작성된데이터:{}'.format(len(postlist), len(extractPostlist), len(postlist)-len(extractPostlist)))
-if len(extractPostlist)==0:
+ """
+from redislib import RedisLib
+rlib = RedisLib()
+keys = rlib.search_hashkeys(arg_targetPostId)
+extractPostList = []
+alreadyWriteList = []
+for key in keys:
+    store_hashdata = rlib.get_store_hashdata(key)
+    isWriteByte = store_hashdata.get(b'isWrite')
+    titleByte = store_hashdata.get(b'title')
+    textByte = store_hashdata.get(b'text')
+    savedImagesByte = store_hashdata.get(b'savedImages')
+    try:
+        if isWriteByte.decode() == 'True':
+            print('수집 후 작성 데이터 : {} | {}'.format(titleByte.decode(), key))
+            alreadyWriteList.append(key)
+        else:
+            print('수집 후 미작성 데이터 : {} | {}'.format(titleByte.decode(), key))
+            import json
+            extractPostList.append((key.decode(), titleByte.decode(), textByte.decode(), json.loads(savedImagesByte)))
+    except Exception as e:
+        print(e)
+        rlib.set_store_hashdata(key.decode(), 'isError', str(True))
+
+print(len(extractPostList))
+
+print('총수집데이터:{} | 미작성데이터:{} | 작성된데이터:{}'.format(len(keys), len(extractPostList), len(alreadyWriteList)))
+if len(extractPostList)==0:
     print('작성할 게시물이 없습니다.')
     sys.exit()
 
-print('자동화 포스팅 시작 3초전!')
-time.sleep(3)
+print('자동화 포스팅 시작 2초전!')
+time.sleep(2)
 from selenium.webdriver.chrome.options import Options
 from selenium import webdriver
 option = Options()
@@ -80,15 +91,16 @@ tistory = Tistory(
         )
 from autogpt import AutoGpt
 gpt = AutoGpt(driver=driver, gpt_url=arg_gptAiprmUrl)
-
-for (idx, expostTuple) in enumerate(extractPostlist):
+errcnt = 0
+errlist = []
+for (idx, expostTuple) in enumerate(extractPostList):
     link = expostTuple[0]
     title = expostTuple[1]
     text = expostTuple[2]
     savedimages = expostTuple[3]
 
-    gptText = gpt.searchGPT2(text)
-    #gptText = text # FIXME gpt 처리 임시 주석
+    #gptText = gpt.searchGPT2(text)
+    gptText = text # FIXME gpt 처리 임시 주석
     print('gptText : {}'.format(gptText))
     #for img in savedimages:
         #datas.append(('image', img))
@@ -102,9 +114,17 @@ for (idx, expostTuple) in enumerate(extractPostlist):
     try:
         tistory.write(title=title, datas=datas)
         rlib.set_store_hashdata(link, 'isWrite', str(True))
-        print('작성 완료 {}/{}'.format(idx+1, len(extractPostlist)))
+        rlib.set_store_hashdata(link, 'isError', str(False))
+        print('작성 완료 {}/{}'.format(idx+1, len(extractPostList)))
     except Exception as e:
         print(e)
-        print('작성 실패')
+        print('작성 실패 : {} | {}'.format(title, link))
+        errcnt = errcnt + 1
+        rlib.set_store_hashdata(link, 'isError', str(True))
+        errlist.append((title, link))
 
     #break 테스트용
+        
+print("에러갯수 : {}/{}".format(errcnt, len(extractPostList)))
+for (idx, errTuple) in enumerate(errlist):
+    print("에러{} : {} | {}".format(idx, errTuple[0], errTuple[1]))

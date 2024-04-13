@@ -1,19 +1,9 @@
 import sys
 import json
-# 인자 입력받기
-#if len(sys.argv) != 3:
-#    print("길이 :", len(sys.argv))
-#    print("ID와 비밀번호를 인자로 입력하세요.")
-#    sys.exit()
 
-args_id = '' #sys.argv[1]
-args_pw = '' #sys.argv[2]
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'yosiki1928'
-arg_tistoryWriteUrl = 'https://one.tddiary.com'
-#arg_gptAiprmUrl = 'https://chat.openai.com/?AIPRM_PromptID=1784224785543462912'
-arg_gptAiprmUrl = 'https://chat.openai.com'
+arg_targetPostId = 'chummilmil99'
 
 # 새글 가져오기
 if arg_platform == 'n':
@@ -31,6 +21,8 @@ from redislib import RedisLib
 rlib = RedisLib()
 #rlib.clearData() # 주석하기(데이터초기화)
 extractPostlist = []
+errlist = []
+alreadylist = []
 for idx, post in enumerate(postlist):
     # 변수 초기화
     title = post['title']
@@ -49,6 +41,7 @@ for idx, post in enumerate(postlist):
                 post_name = title, 
                 platform=arg_platform,
                 savedir=arg_saveDir,
+                postid=arg_targetPostId,
                 savefolder=titleregex
             )
             expost.parsing_blog()
@@ -66,7 +59,16 @@ for idx, post in enumerate(postlist):
         except Exception as e:
             print(e)
             rlib.remove_key(link) # 신규등록 과정에서 오류 시 레디스에서 키를 제거해서 다시 수행할 수 있게 함
-        
+            errlist.append((title, link))
+    else:
+        alreadylist.append((title, link))
+    
+    print("- 처리현황 : {} / {}".format(idx+1, len(postlist)))
+
+print("## 처리현황 - 수집데이터 : {}개 | 처리데이터: {}개 | 기처리데이터: {}개 | 오류데이터: {}개".format(len(postlist), len(extractPostlist), len(alreadylist), len(errlist)))
+for (idx, errtuple) in enumerate(errlist):
+    print("에러[{}] : {} | {}".format(idx, errtuple[0], errtuple[1]))
+    
 
     
 
