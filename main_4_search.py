@@ -7,8 +7,8 @@ keys = rlib.search_hashkeys(arg_targetPostId)
 print('{} 블로그 저장 데이터 조회'.format(arg_targetPostId))
 for (idx, key) in enumerate(keys):
     store_hashdata = rlib.get_store_hashdata(key)
-    isWrite = 'Y' if store_hashdata.get(b'isWrite').decode() == 'True' else 'N'
-    isError = 'Y' if store_hashdata.get(b'isError').decode() == 'True' else 'N'
+    isWrite = 'Y' if store_hashdata.get(b'isWrite') != None and store_hashdata.get(b'isWrite').decode() == 'True' else 'N'
+    isError = 'Y' if store_hashdata.get(b'isError')!= None and store_hashdata.get(b'isError').decode() == 'True' else 'N'
     isErrorByte = store_hashdata.get(b'isError')
     titleByte = store_hashdata.get(b'title')
     textByte = store_hashdata.get(b'text')
