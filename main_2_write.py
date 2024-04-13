@@ -10,41 +10,6 @@ arg_gptAiprmUrl = 'https://chat.openai.com'
 
 
 # 새글 스크래핑
-"""
-# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
-# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
-# TODO 검증시 하기 코드 삭제 [2024.04.13 CJH]
-from redislib import RedisLib
-rlib = RedisLib()
-#rlib.clearData() # 주석하기(데이터초기화)
-extractPostlist = []
-for idx, post in enumerate(postlist):
-    # 변수 초기화
-    title = post['title']
-    titleregex = post['titleregex']
-    link = post['link']
-    # 레디스 변수 넣고 처리(true인 경우 신규, false는 기처리라 패쓰)
-
-    store_hashdata = rlib.get_store_hashdata(link)
-    isWriteByte = store_hashdata.get(b'isWrite')
-    titleByte = store_hashdata.get(b'title')
-    textByte = store_hashdata.get(b'text')
-    savedImagesByte = store_hashdata.get(b'savedImages')
-
-    if not(isWriteByte != None and titleByte != None and textByte != None and savedImagesByte != None):
-        print('isWriteByte : {}'.format(isWriteByte))
-        print('titleByte : {}'.format(titleByte))
-        print('textByte : {}'.format(textByte))
-        print('savedImagesByte : {}'.format(savedImagesByte))
-        continue # None인경우는 패쓰..
-
-    if not (isWriteByte != None and isWriteByte.decode() == 'True') :
-        print('수집 후 미작성 데이터 : {}'.format(title))
-        titleByte = store_hashdata.get(b'title')
-        textByte = store_hashdata.get(b'text')
-        savedImagesByte = store_hashdata.get(b'savedImages')
-        extractPostlist.append((link, titleByte.decode(), textByte.decode(), json.loads(savedImagesByte)))
- """
 from redislib import RedisLib
 rlib = RedisLib()
 keys = rlib.search_hashkeys(arg_targetPostId)
@@ -86,7 +51,7 @@ driver = webdriver.Chrome(options=option)
 from selenium_module.tistory import Tistory
 
 tistory = Tistory(
-            url='{}/manage'.format(arg_tistoryWriteUrl),
+            url='{}'.format(arg_tistoryWriteUrl),
             driver=driver
         )
 from autogpt import AutoGpt

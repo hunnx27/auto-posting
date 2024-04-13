@@ -89,7 +89,7 @@ class Tistory:
         driver = self._driver
         driver.get("about:blank")
         driver.implicitly_wait(10)
-        driver.get("{}{}".format(self._url, '/post'))
+        driver.get("{}{}".format(self._url, '/manage/post'))
         driver.implicitly_wait(10)
         
         from selenium.webdriver.support.ui import WebDriverWait
@@ -178,14 +178,14 @@ class Tistory:
         REPLACE_TXT_NEW = '"style":"alignCenter","link":"{}","isLinkNewWindow":true}}_##]'.format(link)
         result = imgtag.replace(REPLACE_TXT, REPLACE_TXT_NEW)
         return result
-
+    
     def write(self, title, datas):
         time.sleep(1)
         print('[write]step1')
         driver = self._driver
         driver.get("about:blank")
         driver.implicitly_wait(10)
-        driver.get("{}{}".format(self._url, '/post'))
+        driver.get("{}{}".format(self._url, '/manage/post'))
         driver.implicitly_wait(10)
         # /html/body/div[2]/div/div/div/div/div/a[2]
 
