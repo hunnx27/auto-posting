@@ -99,8 +99,12 @@ for (idx, expostTuple) in enumerate(extractPostlist):
     datas = []
     datas.append(('text', mergedText))
     print(mergedText)
-    tistory.write(title=title, datas=datas)
-    rlib.set_store_hashdata(link, 'isWrite', str(True))
-    print('작성 완료 {}/{}'.format(idx+1, len(extractPostlist)))
+    try:
+        tistory.write(title=title, datas=datas)
+        rlib.set_store_hashdata(link, 'isWrite', str(True))
+        print('작성 완료 {}/{}'.format(idx+1, len(extractPostlist)))
+    except Exception as e:
+        print(e)
+        print('작성 실패')
 
     #break 테스트용
