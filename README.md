@@ -1,3 +1,8 @@
+# 파이썬 설치
+파이썬 3.10.4버전 64비트 설치
+https://www.python.org/downloads/release/python-3104/
+Windows Installer (64-bit) - 27.2mb 다운로드 및 설치
+
 pip install redis
 python.exe -m pip install --upgrade pip
 
