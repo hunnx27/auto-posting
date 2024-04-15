@@ -97,12 +97,16 @@ ad_map ={
 #print(ad_map['one.tddiary.com'])
 
 # 랜덤으로 광고 박는 로직
-MAX_AD_SIZE = 2
+MAX_AD_SIZE = 3
 img1 = '[##_Image|kage@1.img_##]'
 img2 = '[##_Image|kage@2.img_##]'
 img3 = '[##_Image|kage@3.img_##]'
 img4 = '[##_Image|kage@4.img_##]'
-imgArr = [img1, img2, img3, img4]
+img5 = '[##_Image|kage@5.img_##]'
+img6 = '[##_Image|kage@6.img_##]'
+img7 = '[##_Image|kage@7.img_##]'
+img8 = '[##_Image|kage@8.img_##]'
+imgArr = [img1, img2, img3, img4, img5, img6, img7, img8]
 list = list(range(len(imgArr)))
 print(list)
 import random
@@ -111,7 +115,5 @@ list = list[0:MAX_AD_SIZE]
 print(list)
 for (idx, img) in enumerate(imgArr):
     if idx in list:
-        print(idx)
-        # 여기에 광고 삽입
-     
+        print('[{}]{}\n{}'.format(idx, img, ad_map['one.tddiary.com']))
      # 여기는 기존로직 그대로

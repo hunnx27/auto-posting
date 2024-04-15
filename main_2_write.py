@@ -1,12 +1,14 @@
 import sys
 import json
 import time
+import configAd
 
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
 arg_targetPostId = 'chummilmil99'
 arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
+
 
 
 # 새글 스크래핑
@@ -52,7 +54,9 @@ from selenium_module.tistory import Tistory
 
 tistory = Tistory(
             url='{}'.format(arg_tistoryWriteUrl),
-            driver=driver
+            driver=driver,
+            max_ad_size=configAd.args_max_ad_size,
+            ad_map=configAd.args_ad_map
         )
 from autogpt import AutoGpt
 gpt = AutoGpt(driver=driver, gpt_url=arg_gptAiprmUrl)

@@ -7,10 +7,12 @@ import sys
 
 class Tistory:
 
-    def __init__(self, url, id='', pw='', driver=''):
+    def __init__(self, url, id='', pw='', driver='', max_ad_size=3, ad_map=None):
         self._url = url
         self._id = id
         self._pw = pw
+        self._max_ad_size = max_ad_size
+        self._ad_map = ad_map
         if driver!='':
             self._driver = driver
         else:
@@ -59,7 +61,10 @@ class Tistory:
     def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
         text = gptText
         imgArr = self.__getImageTags(savedimages=savedimages)
-
+        ad_location_idx_list = list(range(len(imgArr)))
+        import random
+        random.shuffle(ad_location_idx_list)
+        ad_location_idx_list = ad_location_idx_list[0:self._max_ad_size]
         for (idx, imgtag) in enumerate(imgArr):
             if len(imgArr) == idx+1:
                 break
@@ -69,13 +74,17 @@ class Tistory:
             except Exception as e:
                 print('__imageLinkInsert err : {}'.format(e))
 
+            if idx in ad_location_idx_list:
+                #광고 랜덤 삽입
+                imgtag = '{}{}'.format(imgtag, self.__get_ad_script())
+
             findtxt = '[이미지 삽입 위치 {}]'.format(idx+1)
             notfoundlist = []
             if text.find(findtxt) != -1:
                 text = text.replace(findtxt, imgtag)
             else:
                 text = text + '\n' + imgtag
-                
+            
             #print('#text2 : {}'.format(text))
             
         return text
@@ -175,7 +184,8 @@ class Tistory:
         imgpath = imgarr[1]
         link = "{}/{}".format(DEFAULT_LINK, imgpath)
         REPLACE_TXT = '"style":"alignCenter"}_##]'
-        REPLACE_TXT_NEW = '"style":"alignCenter","link":"{}","isLinkNewWindow":true}}_##]'.format(link)
+        #REPLACE_TXT_NEW = '"style":"alignCenter","link":"{}","isLinkNewWindow":true}}_##]'.format(link)
+        REPLACE_TXT_NEW = '"style":"alignCenter","link":"{}"}}_##]'.format(link)
         result = imgtag.replace(REPLACE_TXT, REPLACE_TXT_NEW)
         return result
     
@@ -282,3 +292,7 @@ class Tistory:
             driver.switch_to.default_content
         except Exception as e:
             print(e)
+
+    def __get_ad_script(self):
+        ad_script = '{}{}'.format('\n', self._ad_map[self._url]) if self._ad_map!=None and self._ad_map[self._url]!=None else ''
+        return ad_script
