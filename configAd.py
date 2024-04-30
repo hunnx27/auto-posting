@@ -43,8 +43,9 @@ __ad__superblo_tistory_com ='''<div><script async src="https://pagead2.googlesyn
 </script></div>'''
 
 args_ad_map ={
-    'one.tddiary.com': __ad__one_tddiary_com,
-    'cinema.tddiary.com': __ad__cinema_tddiary_com,
-    'https://superblo.tistory.com': __ad__superblo_tistory_com
+    'https://one.tddiary.com': __ad__one_tddiary_com,
+    'https://cinema.tddiary.com': __ad__cinema_tddiary_com,
+    'https://superblo.tistory.com': __ad__superblo_tistory_com,
+    #'https://policy.tddiary.com': __ad__policy.tddiary_com
 }
 

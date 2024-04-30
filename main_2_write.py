@@ -5,10 +5,16 @@ import configAd
 
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'chummilmil99'
-arg_tistoryWriteUrl = 'https://superblo.tistory.com'
+arg_targetPostId = 'okjoa012'
+arg_tistoryWriteUrl = 'https://cinema.tddiary.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
 
+#https://cinema.tddiary.com
+#https://policy.tddiary.com
+#okjoa012  영화7
+#alsk1130  영화
+#yosiki1928  이슈눈물의 여왕 촬영지 용두객       
+#jobary1
 
 
 # 새글 스크래핑

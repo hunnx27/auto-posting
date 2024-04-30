@@ -3,8 +3,8 @@ import json
 
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'chummilmil99'
-arg_scraped_page = 3 # page * 24 더가져옴 (ex: 3설정시 기존24개 + 24*3 = 총 96개 스크랩함)
+arg_targetPostId = 'yosiki1928'
+arg_scraped_page = 1 # page * 24 더가져옴 (ex: 3설정시 기존24개 + 24*3 = 총 96개 스크랩함)
 
 # 새글 가져오기
 if arg_platform == 'n':

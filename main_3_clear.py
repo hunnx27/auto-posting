@@ -1,5 +1,5 @@
 
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'okjoa012'
 arg_saveDir = 'C:/tdcompany/data'
 
 from redislib import RedisLib

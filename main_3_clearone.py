@@ -1,7 +1,7 @@
 
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'okjoa012'
 arg_saveDir = 'C:/tdcompany/data'
-arg_deletepost = 'https://m.blog.naver.com/PostView.naver?blogId=chummilmil99&logNo=223414142101&navType=by'
+arg_deletepost = 'https://m.blog.naver.com/PostView.naver?blogId=okjoa012&logNo=223409733462&navType=by'
 
 from redislib import RedisLib
 rlib = RedisLib()

@@ -1,5 +1,5 @@
 
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'okjoa012'
 
 from redislib import RedisLib
 rlib = RedisLib()
