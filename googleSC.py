@@ -36,15 +36,23 @@ class GoogleSC:
             print(e)
         #print('해상도 체크 : {}'.format(width))
 
-        if width <= 660:
+        if width <= 895:
             # 검색 클릭
-            print('[660px 이하] >> 검색 버튼 클릭')
-            urlCheckBtn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable( (By.XPATH, "/html/body/div[1]/div[2]/header/div[2]/div[2]/div[2]/form/button[3]") ))
+            print('[895px 이하] >> 검색 버튼 클릭')
+            urlCheckBtn = WebDriverWait(driver, 10).until(EC.element_to_be_clickable( (By.XPATH, "/html/body/*/div[2]/header/div[2]/div[2]/div[2]/form/button[3]") ))                                                                                                  
             urlCheckBtn.click()
             #print('검색버튼 clicked..')
+        else:
+            try:
+                print('[895px 이상] >> 검색 버튼 클릭')
+                urlCheckBtn = WebDriverWait(driver, 1).until(EC.element_to_be_clickable( (By.XPATH, "/html/body/*/div[2]/header/div[2]/div[2]/div[2]/form/button[3]") ))
+                urlCheckBtn.click()
+            except Exception as e:
+                print(e)
 
         # 색인 URL 검색
-        searchUrlInput = WebDriverWait(driver, 10).until(EC.element_to_be_clickable( (By.CSS_SELECTOR, "#gb > div.gb_sd.gb_ld.gb_yd div.gb_Fe > form > div > div > div > div > div > div.d1dlne > input.Ax4B8.ZAGvjd") ))
+        print(2.5)
+        searchUrlInput = WebDriverWait(driver, 10).until(EC.element_to_be_clickable( (By.CSS_SELECTOR, "#gb form div.d1dlne > input.Ax4B8.ZAGvjd") ))
         print(3)                                                                          
         searchUrlInput.send_keys(input)
         time.sleep(1)
