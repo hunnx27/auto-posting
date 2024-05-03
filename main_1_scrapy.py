@@ -3,7 +3,12 @@ import json
 
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'chummilmil99'
+arg_targetPostId = 'okjoa012'
+#alsk1130
+#okjoa012
+#yosiki1928
+#yunys4303
+#jobary1 이슈2
 
 # 새글 가져오기
 if arg_platform == 'n':
