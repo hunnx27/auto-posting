@@ -7,7 +7,7 @@ from selenium.webdriver.common.by import By
 import time
 from selenium.webdriver.common.keys import Keys
 
-arg_blogURL = 'https://cinema.tddiary.com'
+arg_blogURL = 'https://policy.tddiary.com'
 
 option = Options()
 option.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
