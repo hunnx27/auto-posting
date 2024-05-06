@@ -196,7 +196,6 @@ class Tistory:
         driver.get("about:blank")
         driver.implicitly_wait(10)
         driver.get("{}{}".format(self._url, '/manage/post'))
-        driver.implicitly_wait(10)
         # /html/body/div[2]/div/div/div/div/div/a[2]
 
         import pyautogui
