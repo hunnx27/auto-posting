@@ -134,11 +134,14 @@ class Tistory:
         import pyperclip
 
         for imgUrl in savedimages:
-            time.sleep(0.3)
-            ilib = ImageLib()
-            ilib.copy(imgUrl)
-            print('image copy')
-            pyautogui.hotkey("ctrl", "v")
+            try:
+                time.sleep(0.3)
+                ilib = ImageLib()
+                ilib.copy(imgUrl)
+                print('image copy')
+                pyautogui.hotkey("ctrl", "v")
+            except Exception as e:
+                print(e)
 
         driver.switch_to.default_content()
 
@@ -264,10 +267,14 @@ class Tistory:
                 pyperclip.copy(context)
                 pyautogui.hotkey("ctrl", "v")
             elif type == 'image':
-                ilib = ImageLib()
-                ilib.copy(context)
-                print('image copy')
-                pyautogui.hotkey("ctrl", "v")
+                try:
+                    ilib = ImageLib()
+                    ilib.copy(context)
+                    print('image copy')
+                    pyautogui.hotkey("ctrl", "v")
+                except Exception as e:
+                    pyperclip.copy('')
+                    pyautogui.hotkey("ctrl", "v")
 
         driver.switch_to.default_content()
         time.sleep(3)

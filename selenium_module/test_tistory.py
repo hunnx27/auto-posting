@@ -113,10 +113,16 @@ for data in datas:
     if type == 'txt':
         content_write.send_keys(context)
     elif type == 'image':
-        ilib = ImageLib()
-        ilib.copy(context)
-        pyautogui.hotkey("ctrl", "v")
-        is_wait = True
+        try:
+            ilib = ImageLib()
+            ilib.copy(context)
+            pyautogui.hotkey("ctrl", "v")
+            is_wait = True
+        except Exception as e:
+            pyperclip.copy('')
+            pyautogui.hotkey("ctrl", "v")
+            is_wait = True
+
 
 
 driver.switch_to.default_content

@@ -13,6 +13,9 @@ class ImageLib:
         image = Image.open(img_path)
         output = BytesIO()
         image.convert("RGB").save(output, "BMP")
+        filesizebyte = output.getbuffer().nbytes
+        if(filesizebyte >= 20 * 1024 * 1024):
+            raise Exception('20Mb를 초과하였습니다.')
         data = output.getvalue()[14:]
         output.close()
         send_to_clipboard(win32clipboard.CF_DIB, data)
