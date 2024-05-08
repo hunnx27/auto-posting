@@ -86,7 +86,7 @@ class Tistory:
                 text = text + '\n' + imgtag
             
             #print('#text2 : {}'.format(text))
-            
+        time.sleep(1)
         return text
 
     def __getImageTags(self, savedimages):
