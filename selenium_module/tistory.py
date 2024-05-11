@@ -206,6 +206,13 @@ class Tistory:
         result = imgtag.replace(REPLACE_TXT, REPLACE_TXT_NEW)
         return result
     
+    
+    def getPostUri(self, title):
+        from urllib import parse
+        self._url
+        post_uri = '{}{}{}'.format(self._url, '/entity/', parse.quote(title))
+        return post_uri
+
     def write(self, title, datas, isSave=False):
         time.sleep(1)
         print('[write]step1')
@@ -294,27 +301,36 @@ class Tistory:
         time.sleep(3)
         
         if isSave:
+
             # 완료 버튼
-            tempSave = driver.find_element(By.CSS_SELECTOR, "#publish-layer-btn")
-            tempSave.click()
+            saveButton = driver.find_element(By.CSS_SELECTOR, "#publish-layer-btn")
+            saveButton.click()
             time.sleep(1)
 
             # 공개 - 라디오박스
-            tempSave = driver.find_element(By.CSS_SELECTOR, "#open20")
-            tempSave.click()
+            openRadio = driver.find_element(By.CSS_SELECTOR, "#open20")
+            openRadio.click()
             time.sleep(0.5)
 
             # 발행하기 버튼
-            tempSave = driver.find_element(By.CSS_SELECTOR, "#publish-btn")
-            tempSave.click()
+            publishButton = driver.find_element(By.CSS_SELECTOR, "#publish-btn")
+            publishButton.click()
+            
+            firstContent = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body//*//div[@class="wrap_list"]//ul[@class="list_post list_post_type2"]/li[1]/div[2]/strong/a') ))
+            urlPublished = firstContent.get_attribute("href")
+            print(urlPublished)
         else:
             # 임시저장
             tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
             tempSave.click()
-            
+            urlPublished = '#### Warn | Non Published. You should publish First!'
+
         time.sleep(1)
         pyautogui.hotkey("alt", "tab")
         time.sleep(2)
+
+        return urlPublished
+        
 
     # 캡차 체크
     def __captcha_check(self, driver, delay=3):

@@ -88,10 +88,19 @@ for (idx, expostTuple) in enumerate(extractPostList):
     print(mergedText)
     try:
         # 기본 글쓰기 # todo 임시글이 아닌 실제 글쓰기
-        tistory.write(title=title, datas=datas, isSave=True)
+        urlPublished = tistory.write(title=title, datas=datas, isSave=True)
         rlib.set_store_hashdata(link, 'isWrite', str(True))
         # 색인 등록
-        
+        from googleSC import GoogleSC
+        sc = GoogleSC(blog_url=arg_tistoryWriteUrl, driver=driver)
+        try:
+            #sc.indexUri(tistory.getPostUri(urlPublishTitle))
+            sc.indexUri(urlPublished)
+        except Exception as e:
+            print('# 인덱스 에러 : e:{}'.format(e))
+        finally:
+            time.sleep(2)
+
         rlib.set_store_hashdata(link, 'isError', str(False))
         print('작성 완료 {}/{}'.format(idx+1, len(extractPostList)))
     except Exception as e:
