@@ -58,21 +58,26 @@ class Tistory:
         loginBtnElm.click()
         #self.__captcha_check(driver) # 캡차 체크
 
-    def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText):
+    def exportImageLinkAndMergeTextAndGetText(self, savedimages, gptText, maxImageLen=999):
         text = gptText
         imgArr = self.__getImageTags(savedimages=savedimages)
-        ad_location_idx_list = list(range(len(imgArr)))
+        ad_location_idx_list = list(range(min(len(imgArr), maxImageLen)))
+        ad_location_idx_list.remove(0)
         import random
         random.shuffle(ad_location_idx_list)
-        ad_location_idx_list = ad_location_idx_list[0:self._max_ad_size]
+        ad_location_idx_list = ad_location_idx_list[0:self._max_ad_size-1]
+        ad_location_idx_list.insert(0, 0)
         for (idx, imgtag) in enumerate(imgArr):
-            if len(imgArr) == idx+1:
-                break
+            #if len(imgArr) == idx+1:
+            #    break
             
-            try:
-                imgtag = self.__imageLinkInsert(imgtag=imgtag)
-            except Exception as e:
-                print('__imageLinkInsert err : {}'.format(e))
+            if(idx+1<= maxImageLen):
+                try:
+                    imgtag = self.__imageLinkInsert(imgtag=imgtag)
+                except Exception as e:
+                    print('__imageLinkInsert err : {}'.format(e))
+            else:
+                imgtag = ''
 
             if idx in ad_location_idx_list:
                 #광고 랜덤 삽입
@@ -86,8 +91,17 @@ class Tistory:
                 text = text + '\n' + imgtag
             
             #print('#text2 : {}'.format(text))
+
+        # 남은 [이미지 삽입 위치 ~] 있는 경우 제거
+        filtered_test = self.__remove_empty_image_lines(text)
         time.sleep(1)
-        return text
+        return filtered_test
+
+    def __remove_empty_image_lines(self, text):
+            lines = text.split('\n')  # 줄 단위로 분할
+            #filtered_lines = [line for line in lines if not '[이미지 삽입 위치' in line]  # 이미지 삽입 위치를 포함하지 않는 줄 선택
+            filtered_lines = [line for line in lines if not '[이미지' in line]  # 이미지 삽입 위치를 포함하지 않는 줄 선택
+            return '\n'.join(filtered_lines)  # 처리된 줄을 다시 합침
 
     def __getImageTags(self, savedimages):
         import pyautogui

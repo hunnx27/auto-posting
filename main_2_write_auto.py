@@ -81,7 +81,7 @@ for (idx, expostTuple) in enumerate(extractPostList):
     title = extract_title if extract_title!='' else title
     gptText_withoutTitle = gptText.replace(firstRow + '\n', '')
     #mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages[:1], gptText=gptText) #테스트용
-    mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages, gptText=gptText_withoutTitle, maxImageLen=999)
+    mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages, gptText=gptText_withoutTitle, maxImageLen=5)
     
     datas = []
     datas.append(('text', mergedText))
