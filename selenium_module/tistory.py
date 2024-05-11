@@ -206,7 +206,7 @@ class Tistory:
         result = imgtag.replace(REPLACE_TXT, REPLACE_TXT_NEW)
         return result
     
-    def write(self, title, datas):
+    def write(self, title, datas, isSave=False):
         time.sleep(1)
         print('[write]step1')
         driver = self._driver
@@ -293,9 +293,25 @@ class Tistory:
         driver.switch_to.default_content()
         time.sleep(3)
         
-        # 임시저장
-        tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
-        tempSave.click()
+        if isSave:
+            # 완료 버튼
+            tempSave = driver.find_element(By.CSS_SELECTOR, "#publish-layer-btn")
+            tempSave.click()
+            time.sleep(1)
+
+            # 공개 - 라디오박스
+            tempSave = driver.find_element(By.CSS_SELECTOR, "#open20")
+            tempSave.click()
+            time.sleep(0.5)
+
+            # 발행하기 버튼
+            tempSave = driver.find_element(By.CSS_SELECTOR, "#publish-btn")
+            tempSave.click()
+        else:
+            # 임시저장
+            tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")
+            tempSave.click()
+            
         time.sleep(1)
         pyautogui.hotkey("alt", "tab")
         time.sleep(2)

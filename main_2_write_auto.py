@@ -87,8 +87,11 @@ for (idx, expostTuple) in enumerate(extractPostList):
     datas.append(('text', mergedText))
     print(mergedText)
     try:
-        tistory.write(title=title, datas=datas)
+        # 기본 글쓰기 # todo 임시글이 아닌 실제 글쓰기
+        tistory.write(title=title, datas=datas, isSave=True)
         rlib.set_store_hashdata(link, 'isWrite', str(True))
+        # 색인 등록
+        
         rlib.set_store_hashdata(link, 'isError', str(False))
         print('작성 완료 {}/{}'.format(idx+1, len(extractPostList)))
     except Exception as e:
