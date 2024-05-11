@@ -8,6 +8,7 @@ arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
 arg_targetPostId = 'okjoa012'
 arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
+args_today_max_write_count = 10 # 오늘 최대 포스트 작성 갯수
 
 #https://cinema.tddiary.com
 #https://policy.tddiary.com
@@ -17,9 +18,33 @@ arg_gptAiprmUrl = 'https://chat.openai.com'
 #jobary1
 
 
-# 새글 스크래핑
 from redislib import RedisLib
 rlib = RedisLib()
+
+# 작성수 체크
+from datetime import datetime
+today = datetime.today().strftime("%Y-%m-%d")
+todayKey = '{}:{}'.format(arg_tistoryWriteUrl, today)
+
+def checkTodayPostWrite(todayKey):
+    today_store_hashdata = rlib.get_store_hashdata(todayKey)
+    todayWriteCountByte = today_store_hashdata.get(b'write_count') if today_store_hashdata.get(b'write_count')!=None else b'0'
+    todayWriteCount = int(todayWriteCountByte.decode())
+    if todayWriteCount >= args_today_max_write_count:
+        print('''
+### ALARAM ###
+해당 블로그는 오늘 작성할 최고 갯수({}개 까지만 가능)를 모두 작성하여 작성이 불가합니다.
+작성을 원하시면 args_today_max_write_count 변수의 갯수를 높이세요.[오늘 작성 포스팅 수 : {}개]
+'''.format(args_today_max_write_count, todayWriteCount))
+        sys.exit(0)
+def todayPostWriteCounting(todayKey):
+    today_store_hashdata = rlib.get_store_hashdata(todayKey)
+    todayWriteCountByte = today_store_hashdata.get(b'write_count') if today_store_hashdata.get(b'write_count')!=None else b'0'
+    todayWriteCount = int(todayWriteCountByte.decode())
+    rlib.set_store_hashdata(todayKey, 'write_count', todayWriteCount+1)
+checkTodayPostWrite(todayKey)
+
+    # 새글 스크래핑
 keys = rlib.search_hashkeys(arg_targetPostId)
 extractPostList = []
 alreadyWriteList = []
@@ -57,7 +82,6 @@ option.add_experimental_option("debuggerAddress", "127.0.0.1:9222")
 driver = webdriver.Chrome(options=option)
 
 from selenium_module.tistory import Tistory
-
 tistory = Tistory(
             url='{}'.format(arg_tistoryWriteUrl),
             driver=driver,
@@ -69,6 +93,8 @@ gpt = AutoGpt(driver=driver, gpt_url=arg_gptAiprmUrl)
 errcnt = 0
 errlist = []
 for (idx, expostTuple) in enumerate(extractPostList):
+    checkTodayPostWrite(todayKey) # 오늘 최고 작성 카운트 체크
+
     link = expostTuple[0]
     title = expostTuple[1]
     text = expostTuple[2]
@@ -102,6 +128,10 @@ for (idx, expostTuple) in enumerate(extractPostList):
             time.sleep(2)
 
         rlib.set_store_hashdata(link, 'isError', str(False))
+
+        # 오늘 작성 블로그 카운팅
+        todayPostWriteCounting(todayKey)
+
         print('작성 완료 {}/{}'.format(idx+1, len(extractPostList)))
     except Exception as e:
         print(e)
