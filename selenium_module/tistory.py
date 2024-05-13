@@ -318,7 +318,11 @@ class Tistory:
             
             firstContent = wait.until(EC.element_to_be_clickable( (By.XPATH, '/html/body//*//div[@class="wrap_list"]//ul[@class="list_post list_post_type2"]/li[1]/div[2]/strong/a') ))
             urlPublished = firstContent.get_attribute("href")
-            print(urlPublished)
+            print('1. {}'.format(urlPublished))
+            uri = urlPublished.split('/entry/')[1]
+            print('2. {}'.format(uri))
+            urlPublished = '{}{}{}'.format(self._url, '/entry/', uri)
+            print('3. {}'.format(urlPublished))
         else:
             # 임시저장
             tempSave = driver.find_element(By.XPATH, "/html/body/div[1]/div/div[2]/div[3]/span/div/a[1]")

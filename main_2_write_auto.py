@@ -6,7 +6,7 @@ import configAd
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
 arg_targetPostId = 'yosiki1928'
-arg_tistoryWriteUrl = 'https://cinema.tddiary.com'
+arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
 args_today_max_write_count = 15 # 오늘 최대 포스트 작성 갯수
 
