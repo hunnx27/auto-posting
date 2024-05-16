@@ -76,11 +76,13 @@ class AutoGpt:
             wait = WebDriverWait(driver, 120)
             #elm = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[2]/main/div[2]/div[2]/form/div/div[2]/div/button")))
             #elm = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body/div[1]/div[1]/div[2]/main/div[2]/div[2]//*/button")))
-            elm = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body//*/textarea[@id='prompt-textarea']/following-sibling::button[@disabled]")))
+            #elm = wait.until(EC.presence_of_element_located((By.XPATH, "/html/body//*/textarea[@id='prompt-textarea']/following-sibling::button[@disabled]")))
+            elm = wait.until(EC.presence_of_element_located((By.CSS_SELECTOR , "form button[disabled]")))
             print(elm.text)
             print('응답완료..5초뒤 복사!')
             time.sleep(3)
             pyautogui.hotkey("ctrl", "shift", "c")
+            # 복사 버튼 CSS_SELECTOR : div[data-scroll-anchor=true] span[data-state="closed"]:nth-child(2) > button
             gpttxt = pyperclip.paste()
             print('paste text : {}'.format(gpttxt))
         except Exception as e:
