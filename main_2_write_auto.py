@@ -5,10 +5,11 @@ import configAd
 
 arg_platform = 'n' # n:naver t:tistory TODO 인자로 받게 수정필요
 arg_saveDir = 'C:/tdcompany/data' # TODO 인자로 받게 수정필요
-arg_targetPostId = 'yosiki1928'
+arg_targetPostId = 'okjoa012'
 arg_tistoryWriteUrl = 'https://superblo.tistory.com'
 arg_gptAiprmUrl = 'https://chat.openai.com'
 args_today_max_write_count = 15 # 오늘 최대 포스트 작성 갯수
+args_image_max_count = 99
 
 #https://cinema.tddiary.com
 #https://policy.tddiary.com
@@ -107,7 +108,7 @@ for (idx, expostTuple) in enumerate(extractPostList):
     title = extract_title if extract_title!='' else title
     gptText_withoutTitle = gptText.replace(firstRow + '\n', '')
     #mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages[:1], gptText=gptText) #테스트용
-    mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages, gptText=gptText_withoutTitle, maxImageLen=5)
+    mergedText = tistory.exportImageLinkAndMergeTextAndGetText(savedimages=savedimages, gptText=gptText_withoutTitle, maxImageLen=args_image_max_count)
     
     datas = []
     datas.append(('text', mergedText))
